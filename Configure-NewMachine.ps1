@@ -28,21 +28,19 @@ function Disable-InternetExplorerESC {
     if (Test-Path $UserKey) {
         Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0
     }
-    
-    Write-Host "IE Enhanced Security Configuration (ESC) has been disabled." -ForegroundColor Green
 }
 
 function Change-FolderOptions {
     $Key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-    Set-ItemProperty $Key -Name "Hidden" -Value 1
-    Set-ItemProperty $Key -Name "HideFileExt" -Value 0    
-    Set-ItemProperty $Key -Name "HideDrivesWithNoMedia" -Value 1
-    Write-Host "Folder options have been modified." -ForegroundColor Green
+    if (Test-Path $Key) {
+        Set-ItemProperty $Key -Name "Hidden" -Value 1
+        Set-ItemProperty $Key -Name "HideFileExt" -Value 0    
+        Set-ItemProperty $Key -Name "HideDrivesWithNoMedia" -Value 1
+    }
 }
 
 function TurnOff-UAC {
     New-ItemProperty -Path HKLM:Software\Microsoft\Windows\CurrentVersion\policies\system -Name EnableLUA -PropertyType DWord -Value 0 -Force
-    Write-Host "UAC has been turned off. Restart computer to take effect." -ForegroundColor Green
 }
 
 Install-Tools
